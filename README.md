@@ -2,13 +2,21 @@
 
 Automate job sourcing, filtering, and application preparation to save 30-40 hours during your job hunt.
 
-## Features (MVP - Day 1 Complete ✅)
+## Features
 
+### Day 1 Complete ✅
 - ✅ **Database Setup**: SQLite database with jobs, user_profile, and application_history tables
 - ✅ **TypeScript Types**: Fully typed data models for type safety
 - ✅ **CRUD Operations**: Complete database operations for jobs and user profiles
 - ✅ **Claude API Integration**: AI-powered resume and cover letter generation
 - ✅ **Seed Data**: Test data with 5 fake jobs to get started
+
+### Day 2 Complete ✅
+- ✅ **Web Scraping**: Puppeteer-based scrapers for LinkedIn and Indeed
+- ✅ **Job Deduplication**: Prevents duplicate entries by URL and company+role
+- ✅ **Smart Filtering**: Match scoring, deal-breaker filtering, salary requirements
+- ✅ **Skill Extraction**: Automatically extracts tech skills from job descriptions
+- ✅ **CLI Script**: `npm run scrape` to fetch new jobs
 
 ## Getting Started
 
@@ -98,7 +106,21 @@ job-pipeline-assistant/
 - `npm run start` - Start production server
 - `npm run db:init` - Initialize empty database
 - `npm run db:seed` - Seed database with test data
-- `npm test:ai` - Test Claude API integration
+- `npm run test:ai` - Test Claude API integration
+- `npm run scrape` - Run job scrapers (LinkedIn + Indeed)
+
+### Scraper Usage
+
+```bash
+# Basic usage (default: "Senior Software Engineer" in "Remote")
+npm run scrape
+
+# Custom search
+npm run scrape -- --search="Staff Engineer" --location="San Francisco"
+
+# Limit results per source
+npm run scrape -- --max=5
+```
 
 ## Tech Stack
 
