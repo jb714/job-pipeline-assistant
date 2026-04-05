@@ -132,6 +132,7 @@ function rowToUserProfile(row: UserProfileRow): UserProfile {
     location_prefs: JSON.parse(row.location_prefs),
     company_size_prefs: row.company_size_prefs ? JSON.parse(row.company_size_prefs) : undefined,
     deal_breakers: JSON.parse(row.deal_breakers),
+    enabled_sources: row.enabled_sources ? JSON.parse(row.enabled_sources) : undefined,
     salary_min: row.salary_min ?? undefined,
   };
 }
@@ -297,6 +298,7 @@ export function saveUserProfile(profile: Omit<UserProfile, 'id' | 'updated_at'>)
     salary_min: profile.salary_min ?? null,
     company_size_prefs: profile.company_size_prefs ? JSON.stringify(profile.company_size_prefs) : null,
     deal_breakers: JSON.stringify(profile.deal_breakers),
+    enabled_sources: profile.enabled_sources ? JSON.stringify(profile.enabled_sources) : null,
     master_resume: profile.master_resume,
     cover_letter_template: profile.cover_letter_template,
     updated_at: now,
@@ -308,7 +310,7 @@ export function saveUserProfile(profile: Omit<UserProfile, 'id' | 'updated_at'>)
       UPDATE user_profile SET
         target_roles = ?, required_skills = ?, nice_to_have_skills = ?,
         location_prefs = ?, salary_min = ?, company_size_prefs = ?,
-        deal_breakers = ?, master_resume = ?, cover_letter_template = ?,
+        deal_breakers = ?, enabled_sources = ?, master_resume = ?, cover_letter_template = ?,
         updated_at = ?
       WHERE id = ?
     `);
@@ -320,6 +322,7 @@ export function saveUserProfile(profile: Omit<UserProfile, 'id' | 'updated_at'>)
       profileRow.salary_min,
       profileRow.company_size_prefs,
       profileRow.deal_breakers,
+      profileRow.enabled_sources,
       profileRow.master_resume,
       profileRow.cover_letter_template,
       profileRow.updated_at,
@@ -330,9 +333,9 @@ export function saveUserProfile(profile: Omit<UserProfile, 'id' | 'updated_at'>)
     const stmt = db.prepare(`
       INSERT INTO user_profile (
         id, target_roles, required_skills, nice_to_have_skills,
-        location_prefs, salary_min, company_size_prefs, deal_breakers,
+        location_prefs, salary_min, company_size_prefs, deal_breakers, enabled_sources,
         master_resume, cover_letter_template, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       profileRow.id,
@@ -343,6 +346,7 @@ export function saveUserProfile(profile: Omit<UserProfile, 'id' | 'updated_at'>)
       profileRow.salary_min,
       profileRow.company_size_prefs,
       profileRow.deal_breakers,
+      profileRow.enabled_sources,
       profileRow.master_resume,
       profileRow.cover_letter_template,
       profileRow.updated_at

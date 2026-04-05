@@ -35,7 +35,7 @@ async function main() {
       searchTerm,
       location,
       maxJobsPerSource,
-      sources: ['linkedin', 'indeed'],
+      sources: ['linkedin', 'indeed', 'remoteok', 'hackernews'],
     });
 
     console.log('\n╔════════════════════════════════════════╗');

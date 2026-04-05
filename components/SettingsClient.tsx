@@ -44,6 +44,17 @@ export function SettingsClient({ initialProfile }: SettingsClientProps) {
   const [coverLetterTemplate, setCoverLetterTemplate] = useState(
     initialProfile?.cover_letter_template || ''
   );
+  const [enabledSources, setEnabledSources] = useState<string[]>(
+    initialProfile?.enabled_sources || ['linkedin', 'indeed', 'remoteok', 'hackernews']
+  );
+
+  const toggleSource = (source: string) => {
+    setEnabledSources((prev) =>
+      prev.includes(source)
+        ? prev.filter((s) => s !== source)
+        : [...prev, source]
+    );
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -56,6 +67,7 @@ export function SettingsClient({ initialProfile }: SettingsClientProps) {
       location_prefs: locationPrefs.split(',').map((s) => s.trim()).filter(Boolean),
       salary_min: salaryMin ? parseInt(salaryMin) : undefined,
       deal_breakers: dealBreakers.split(',').map((s) => s.trim()).filter(Boolean),
+      enabled_sources: enabledSources as any,
       master_resume: masterResume,
       cover_letter_template: coverLetterTemplate,
     });
@@ -224,6 +236,42 @@ export function SettingsClient({ initialProfile }: SettingsClientProps) {
               />
               <p className="text-xs text-muted-foreground mt-1">
                 Jobs containing these keywords will be automatically filtered out
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Job Sources */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Job Sources</CardTitle>
+              <CardDescription>
+                Select which sites to scrape for jobs
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { value: 'linkedin', label: 'LinkedIn', description: 'Professional network (browser-based, slower)' },
+                  { value: 'indeed', label: 'Indeed', description: 'Job aggregator (may have stale listings)' },
+                  { value: 'remoteok', label: 'RemoteOK', description: 'Remote-first tech jobs (fast, fresh)' },
+                  { value: 'hackernews', label: 'HackerNews Who\'s Hiring', description: 'Monthly thread, high-quality startups' },
+                ].map((source) => (
+                  <label key={source.value} className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={enabledSources.includes(source.value)}
+                      onChange={() => toggleSource(source.value)}
+                      className="mt-1 h-4 w-4 rounded border-gray-300"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium">{source.label}</div>
+                      <div className="text-sm text-muted-foreground">{source.description}</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                Recommended: Enable RemoteOK and HackerNews for freshest tech jobs
               </p>
             </CardContent>
           </Card>

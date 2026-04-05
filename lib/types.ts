@@ -13,6 +13,7 @@ export type JobSource =
   | 'linkedin'
   | 'indeed'
   | 'remoteok'
+  | 'hackernews'
   | 'manual';
 
 export type CompanySize =
@@ -53,6 +54,7 @@ export interface UserProfile {
   salary_min?: number;
   company_size_prefs?: CompanySize[];
   deal_breakers: string[];
+  enabled_sources?: JobSource[];
   master_resume: string;
   cover_letter_template: string;
   updated_at: string;
@@ -116,6 +118,7 @@ export interface UserProfileRow {
   salary_min: number | null;
   company_size_prefs: string | null; // JSON array
   deal_breakers: string; // JSON array
+  enabled_sources: string | null; // JSON array
   master_resume: string;
   cover_letter_template: string;
   updated_at: string;

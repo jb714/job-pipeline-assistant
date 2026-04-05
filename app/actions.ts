@@ -13,11 +13,15 @@ export async function fetchNewJobs(
   location?: string
 ): Promise<{ success: boolean; message: string; count?: number }> {
   try {
+    // Get user profile to check enabled sources
+    const userProfile = getUserProfile();
+    const enabledSources = userProfile?.enabled_sources || ['linkedin', 'indeed', 'remoteok', 'hackernews'];
+
     const results = await runScrapers({
       searchTerm: searchTerm || 'Senior Software Engineer',
       location: location || 'Remote',
       maxJobsPerSource: 10,
-      sources: ['linkedin', 'indeed'],
+      sources: enabledSources as any,
     });
 
     revalidatePath('/');

@@ -1,6 +1,8 @@
 import { launchBrowser, createPage } from './browser';
 import { scrapeLinkedIn } from './linkedin';
 import { scrapeIndeed } from './indeed';
+import { scrapeRemoteOK } from './remoteok';
+import { scrapeHackerNews } from './hackernews';
 import { getUserProfile, getAllJobs, insertJob } from '../lib/db';
 import {
   deduplicateJobs,
@@ -11,11 +13,13 @@ import {
 } from '../lib/filters';
 import type { Job } from '../lib/types';
 
+export type JobSource = 'linkedin' | 'indeed' | 'remoteok' | 'hackernews';
+
 interface ScraperOptions {
   searchTerm?: string;
   location?: string;
   maxJobsPerSource?: number;
-  sources?: ('linkedin' | 'indeed')[];
+  sources?: JobSource[];
 }
 
 /**
@@ -32,7 +36,7 @@ export async function runScrapers(options: ScraperOptions = {}): Promise<{
     searchTerm = 'Senior Software Engineer',
     location = 'Remote',
     maxJobsPerSource = 20,
-    sources = ['linkedin', 'indeed'],
+    sources = ['linkedin', 'indeed', 'remoteok', 'hackernews'],
   } = options;
 
   console.log('\n🚀 Starting job scraper...\n');
@@ -52,26 +56,43 @@ export async function runScrapers(options: ScraperOptions = {}): Promise<{
       return { scraped: 0, duplicates: 0, filtered: 0, saved: 0 };
     }
 
-    // Launch browser
-    console.log('🌐 Launching browser...');
-    browser = await launchBrowser();
-
-    // Run LinkedIn scraper
-    if (sources.includes('linkedin')) {
-      console.log('\n--- LinkedIn Scraper ---');
-      const page = await createPage(browser);
-      const linkedInJobs = await scrapeLinkedIn(page, searchTerm, location, maxJobsPerSource);
-      allScrapedJobs.push(...linkedInJobs);
-      await page.close();
+    // Run API-based scrapers first (faster, no browser needed)
+    if (sources.includes('remoteok')) {
+      console.log('\n--- RemoteOK Scraper ---');
+      const remoteOKJobs = await scrapeRemoteOK(searchTerm, maxJobsPerSource);
+      allScrapedJobs.push(...remoteOKJobs);
     }
 
-    // Run Indeed scraper
-    if (sources.includes('indeed')) {
-      console.log('\n--- Indeed Scraper ---');
-      const page = await createPage(browser);
-      const indeedJobs = await scrapeIndeed(page, searchTerm, location, maxJobsPerSource);
-      allScrapedJobs.push(...indeedJobs);
-      await page.close();
+    if (sources.includes('hackernews')) {
+      console.log('\n--- HackerNews Who\'s Hiring Scraper ---');
+      const hackerNewsJobs = await scrapeHackerNews(searchTerm, maxJobsPerSource);
+      allScrapedJobs.push(...hackerNewsJobs);
+    }
+
+    // Only launch browser if we need browser-based scrapers
+    const needsBrowser = sources.includes('linkedin') || sources.includes('indeed');
+
+    if (needsBrowser) {
+      console.log('\n🌐 Launching browser...');
+      browser = await launchBrowser();
+
+      // Run LinkedIn scraper
+      if (sources.includes('linkedin')) {
+        console.log('\n--- LinkedIn Scraper ---');
+        const page = await createPage(browser);
+        const linkedInJobs = await scrapeLinkedIn(page, searchTerm, location, maxJobsPerSource);
+        allScrapedJobs.push(...linkedInJobs);
+        await page.close();
+      }
+
+      // Run Indeed scraper
+      if (sources.includes('indeed')) {
+        console.log('\n--- Indeed Scraper ---');
+        const page = await createPage(browser);
+        const indeedJobs = await scrapeIndeed(page, searchTerm, location, maxJobsPerSource);
+        allScrapedJobs.push(...indeedJobs);
+        await page.close();
+      }
     }
 
     console.log(`\n📊 Total jobs scraped: ${allScrapedJobs.length}`);
