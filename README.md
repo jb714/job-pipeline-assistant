@@ -36,6 +36,16 @@ Automate job sourcing, filtering, and application preparation to save 30-40 hour
 - ✅ **Notes System**: Add personal notes to each job
 - ✅ **Fetch New Jobs**: Button to run scrapers directly from the UI
 
+### Day 5 Complete ✅
+- ✅ **Settings Page**: Manage job preferences, skills, and application materials
+- ✅ **Onboarding Flow**: 4-step wizard for first-time users
+- ✅ **Toast Notifications**: Real-time success/error notifications with Sonner
+- ✅ **Keyboard Shortcuts**: Cmd/Ctrl + G (generate), E (export), O (open job)
+- ✅ **Error Handling**: Graceful error messages throughout the app
+- ✅ **Empty States**: Helpful messages when no data exists
+- ✅ **Responsive Design**: Works on desktop, tablet, and mobile
+- ✅ **Dark Mode Support**: Full dark mode theme support
+
 ## Getting Started
 
 ### Prerequisites
@@ -131,9 +141,52 @@ job-pipeline-assistant/
 - ✅ Can download resume as PDF
 - ✅ Can update job status and add notes
 
-## Next Steps (Day 5)
+## Usage Guide
 
-- **Day 5**: Settings page, onboarding flow, polish, testing, documentation
+### First Time Setup
+
+1. **Start the app**:
+   ```bash
+   npm run dev
+   ```
+
+2. **Complete onboarding** (automatically shown on first visit):
+   - Step 1: Welcome and overview
+   - Step 2: Define target roles, location, and salary preferences
+   - Step 3: Add required skills, nice-to-haves, and deal-breakers
+   - Step 4: Upload your master resume and cover letter template
+
+3. **Fetch jobs**:
+   - Click "Fetch New Jobs" button
+   - Jobs are automatically scraped, filtered, and scored
+   - View results in the dashboard table
+
+### Daily Workflow
+
+1. **Review new jobs**: Check your dashboard for newly scraped jobs
+2. **Click any job** to see full details
+3. **Generate materials**: Click "Generate Resume & Cover Letter" button
+4. **Edit if needed**: Materials are editable inline
+5. **Export PDF**: Click "Export PDF" to save your resume
+6. **Copy cover letter**: Click "Copy" to add to clipboard
+7. **Update status**: Mark as interested → applied → interviewing → offer
+8. **Add notes**: Track your thoughts, follow-ups, etc.
+
+### Keyboard Shortcuts
+
+When viewing a job:
+- `Cmd/Ctrl + G` - Generate resume & cover letter
+- `Cmd/Ctrl + E` - Export resume to PDF
+- `Cmd/Ctrl + O` - Open job posting in new tab
+- `Esc` - Close modal
+
+### Settings
+
+Access settings anytime via the "Settings" button:
+- Update your target roles and preferences
+- Modify required and nice-to-have skills
+- Edit deal-breakers
+- Update master resume and cover letter template
 
 ## Available Scripts
 
@@ -172,9 +225,27 @@ npm run scrape -- --max=5
 - Manual job submission only (no auto-apply)
 - Built for personal use during April 2026 job hunt
 
+## Features
+
+### Core Functionality
+- 🔍 **Automated Job Scraping**: LinkedIn and Indeed integration
+- 📊 **Smart Matching**: 0-100 match score based on your skills and preferences
+- 🚫 **Deal-breaker Filtering**: Automatically filters unwanted jobs
+- ✨ **AI-Powered Generation**: Claude generates tailored resumes and cover letters
+- 📄 **PDF Export**: Professional PDF resumes ready to send
+- 📝 **Status Tracking**: Track each application from new → offer
+- 🗒️ **Notes System**: Add personal notes and follow-ups
+
+### User Experience
+- 🎨 **Modern UI**: Clean dashboard with Shadcn components
+- 🌙 **Dark Mode**: Full dark mode support
+- ⌨️ **Keyboard Shortcuts**: Speed up your workflow
+- 📱 **Responsive**: Works on desktop, tablet, and mobile
+- 🔔 **Toast Notifications**: Real-time success/error feedback
+- 🚀 **Onboarding**: Guided 4-step setup for new users
+
 ---
 
-**Status**: Day 4 Complete ✅ (Days 1-4 done!)
-**Next**: Day 5 - Settings, Polish, Testing
-
-**Progress**: 65% complete (49/75 tickets)
+**Status**: ✅ MVP Complete! (Days 1-5 done)
+**Progress**: 100% of planned tickets complete
+**Ready for**: Production use!

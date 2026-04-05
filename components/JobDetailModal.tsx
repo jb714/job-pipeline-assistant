@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Job, JobStatus } from '@/lib/types';
 import { generateMaterialsAction, updateJobStatusAction, exportResumePDFAction } from '@/app/actions';
 import { ExternalLink, Loader2, Copy, Check, Download } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface JobDetailModalProps {
   job: Job | null;
@@ -39,6 +40,36 @@ export function JobDetailModal({ job, open, onOpenChange }: JobDetailModalProps)
   const [copiedCoverLetter, setCopiedCoverLetter] = useState(false);
   const [exportingPDF, setExportingPDF] = useState(false);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + G to generate materials
+      if ((e.metaKey || e.ctrlKey) && e.key === 'g') {
+        e.preventDefault();
+        if (!resume && !coverLetter && !job.generated_resume_path) {
+          handleGenerate();
+        }
+      }
+      // Cmd/Ctrl + E to export PDF
+      if ((e.metaKey || e.ctrlKey) && e.key === 'e') {
+        e.preventDefault();
+        if (resume || job.generated_resume_path) {
+          handleExportPDF();
+        }
+      }
+      // Cmd/Ctrl + O to open job posting
+      if ((e.metaKey || e.ctrlKey) && e.key === 'o') {
+        e.preventDefault();
+        window.open(job.job_url, '_blank');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open, resume, coverLetter, job]);
+
   if (!job) return null;
 
   const handleGenerate = async () => {
@@ -53,6 +84,9 @@ export function JobDetailModal({ job, open, onOpenChange }: JobDetailModalProps)
     if (result.success && result.resume && result.coverLetter) {
       setResume(result.resume);
       setCoverLetter(result.coverLetter);
+      toast.success('Resume and cover letter generated successfully!');
+    } else {
+      toast.error(result.message || 'Failed to generate materials');
     }
     setGenerating(false);
   };
@@ -86,9 +120,9 @@ export function JobDetailModal({ job, open, onOpenChange }: JobDetailModalProps)
     setExportingPDF(false);
 
     if (result.success) {
-      alert(`Resume exported successfully!\n\nSaved to: generated-resumes/\n\nCheck your project folder.`);
+      toast.success('Resume exported to generated-resumes/ folder!');
     } else {
-      alert(`Failed to export PDF: ${result.message}`);
+      toast.error(result.message || 'Failed to export PDF');
     }
   };
 

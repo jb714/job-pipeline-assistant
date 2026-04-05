@@ -2,9 +2,10 @@
 
 import { revalidatePath } from 'next/cache';
 import { runScrapers } from '@/scrapers';
-import { updateJobStatus, updateJob, getUserProfile, getJobById } from '@/lib/db';
+import { updateJobStatus, updateJob, getUserProfile, getJobById, saveUserProfile } from '@/lib/db';
 import { generateTailoredResume, generateCoverLetter } from '@/lib/ai';
 import { exportResumeToPDF, generatePDFFilename } from '@/lib/pdf';
+import type { UserProfile } from '@/lib/types';
 import path from 'path';
 
 export async function fetchNewJobs(
@@ -135,6 +136,23 @@ export async function exportResumePDFAction(
     return {
       success: false,
       message: 'Failed to export PDF',
+    };
+  }
+}
+
+export async function saveUserProfileAction(
+  profile: Omit<UserProfile, 'id' | 'updated_at'>
+): Promise<{ success: boolean; message?: string }> {
+  try {
+    saveUserProfile(profile);
+    revalidatePath('/');
+    revalidatePath('/settings');
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving user profile:', error);
+    return {
+      success: false,
+      message: 'Failed to save profile',
     };
   }
 }

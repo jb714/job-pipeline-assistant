@@ -7,8 +7,10 @@ import { JobDetailModal } from '@/components/JobDetailModal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { fetchNewJobs } from '@/app/actions';
 import type { Job } from '@/lib/types';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { Loader2, RefreshCw, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { toast } from 'sonner';
 
 interface DashboardClientProps {
   initialJobs: Job[];
@@ -26,12 +28,15 @@ export function DashboardClient({ initialJobs }: DashboardClientProps) {
     setStatusMessage('Fetching jobs...');
     startTransition(async () => {
       const result = await fetchNewJobs();
-      setStatusMessage(result.message);
-      router.refresh();
 
-      setTimeout(() => {
-        setStatusMessage('');
-      }, 3000);
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+
+      setStatusMessage('');
+      router.refresh();
     });
   };
 
@@ -67,24 +72,32 @@ export function DashboardClient({ initialJobs }: DashboardClientProps) {
               <h1 className="text-4xl font-bold mb-2">Job Pipeline Assistant</h1>
               <p className="text-muted-foreground">Find, filter, and apply faster</p>
             </div>
-            <Button
-              onClick={handleFetchJobs}
-              disabled={isPending}
-              size="lg"
-              className="gap-2"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Fetching Jobs...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4" />
-                  Fetch New Jobs
-                </>
-              )}
-            </Button>
+            <div className="flex gap-3">
+              <Link href="/settings">
+                <Button variant="outline" size="lg" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </Button>
+              </Link>
+              <Button
+                onClick={handleFetchJobs}
+                disabled={isPending}
+                size="lg"
+                className="gap-2"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Fetching Jobs...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4" />
+                    Fetch New Jobs
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
           {statusMessage && (
             <div className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded-lg">
