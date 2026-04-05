@@ -18,6 +18,24 @@ Automate job sourcing, filtering, and application preparation to save 30-40 hour
 - ✅ **Skill Extraction**: Automatically extracts tech skills from job descriptions
 - ✅ **CLI Script**: `npm run scrape` to fetch new jobs
 
+### Day 3 Complete ✅
+- ✅ **Job Filtering & Ranking**: Automatic match score calculation (0-100)
+- ✅ **Deal-breaker Detection**: Filters out jobs with unwanted keywords
+- ✅ **Salary Filtering**: Ensures jobs meet minimum salary requirements
+- ✅ **AI Resume Generation**: Claude-powered tailored resumes
+- ✅ **AI Cover Letter Generation**: Personalized cover letters for each job
+
+### Day 4 Complete ✅
+- ✅ **Dashboard UI**: Clean, professional interface with Shadcn UI components
+- ✅ **Stats Display**: Real-time stats (total jobs, new, applied, interviewing, avg match score)
+- ✅ **Job Table**: Sortable table with color-coded match scores and statuses
+- ✅ **Job Detail Modal**: Full job info with description, skills, and status management
+- ✅ **AI Material Generation**: Generate resume & cover letter with one click
+- ✅ **PDF Export**: Export tailored resumes to PDF with professional formatting
+- ✅ **Status Updates**: Track job application status (new → interested → applied → interviewing → offer)
+- ✅ **Notes System**: Add personal notes to each job
+- ✅ **Fetch New Jobs**: Button to run scrapers directly from the UI
+
 ## Getting Started
 
 ### Prerequisites
@@ -84,20 +102,38 @@ job-pipeline-assistant/
 └── .env                      # Environment variables (gitignored)
 ```
 
-## Day 1 Success Criteria ✅
+## Success Criteria ✅
 
+### Day 1 ✅
 - ✅ Next.js project running (`npm run dev`)
 - ✅ SQLite database created with tables
 - ✅ Can insert/fetch jobs from database
 - ✅ Claude API integration working
 - ✅ Can generate test resume and cover letter
 
-## Next Steps (Day 2-5)
+### Day 2 ✅
+- ✅ Can scrape 20-50 jobs from LinkedIn and Indeed
+- ✅ Jobs saved to database with full descriptions
+- ✅ Deduplication prevents duplicate entries
+- ✅ Can run scraper via `npm run scrape`
 
-- **Day 2**: Web scraping (Puppeteer for LinkedIn/Indeed)
-- **Day 3**: Job filtering, ranking, and AI generation workflows
-- **Day 4**: PDF export + Dashboard UI
-- **Day 5**: Settings page, polish, testing
+### Day 3 ✅
+- ✅ Jobs are ranked by match score (90+ = excellent, 70-89 = good, etc.)
+- ✅ Can generate tailored resume for any job
+- ✅ Can generate tailored cover letter for any job
+- ✅ Generated materials are high quality
+
+### Day 4 ✅
+- ✅ Dashboard shows all scraped jobs in table
+- ✅ Can click "Fetch New Jobs" to run scraper from UI
+- ✅ Can click job to open detail modal
+- ✅ Can generate resume + cover letter from modal
+- ✅ Can download resume as PDF
+- ✅ Can update job status and add notes
+
+## Next Steps (Day 5)
+
+- **Day 5**: Settings page, onboarding flow, polish, testing, documentation
 
 ## Available Scripts
 
@@ -138,5 +174,7 @@ npm run scrape -- --max=5
 
 ---
 
-**Status**: Day 1 Complete ✅
-**Next**: Day 2 - Web Scraping
+**Status**: Day 4 Complete ✅ (Days 1-4 done!)
+**Next**: Day 5 - Settings, Polish, Testing
+
+**Progress**: 65% complete (49/75 tickets)
